@@ -1,0 +1,105 @@
+<instruction_set>
+    <instruction_operand_encoding>
+        <operand_encoding>RM</operand_encoding>
+        <operand1>ModRM:reg (r,w)</operand1>
+        <operand2>ModRM:r/m (r)</operand2>
+        <operand3>NA</operand3>
+        <operand4>NA</operand4>
+    </instruction_operand_encoding>
+    <instruction_operand_encoding>
+        <operand_encoding>MR</operand_encoding>
+        <operand1>ModRM:r/m (r,w)</operand1>
+        <operand2>ModRM:reg (r)</operand2>
+        <operand3>NA</operand3>
+        <operand4>NA</operand4>
+    </instruction_operand_encoding>
+    <instruction_operand_encoding>
+        <operand_encoding>MI</operand_encoding>
+        <operand1>ModRM:r/m (r,w)</operand1>
+        <operand2>imm8/16/32</operand2>
+        <operand3>NA</operand3>
+        <operand4>NA</operand4>
+    </instruction_operand_encoding>
+    <instruction_operand_encoding>
+        <operand_encoding>I</operand_encoding>
+        <operand1>AL/AX/EAX/RAX</operand1>
+        <operand2>imm8/16/32</operand2>
+        <operand3>NA</operand3>
+        <operand4>NA</operand4>
+    </instruction_operand_encoding>
+
+    <instruction_same_name>
+        <instruction_item>
+            <opcode>14 ib</opcode>
+            <instruction>ADC AL,imm8</instruction>
+            <operand_encoding>I</operand_encoding>
+            <mode_64_bit>Valid</mode_64_bit>
+            <mode_compat_leg>Valid</mode_compat_leg>
+            <description>Add with carry imm8 to AL</description>
+        </instruction_item>
+        <instruction_item>
+            <opcode>15 iw</opcode>
+            <instruction>ADC AX,imm16</instruction>
+            <operand_encoding>I</operand_encoding>
+            <mode_64_bit>Valid</mode_64_bit>
+            <mode_compat_leg>Valid</mode_compat_leg>
+            <description>Add with carry imm16 to AX</description>
+        </instruction_item>
+        <instruction_item>
+            <opcode>15 id</opcode>
+            <instruction>ADC EAX,imm32</instruction>
+            <operand_encoding>I</operand_encoding>
+            <mode_64_bit>Valid</mode_64_bit>
+            <mode_compat_leg>Valid</mode_compat_leg>
+            <description>Add with carry imm32 to EAX</description>
+        </instruction_item>
+        <instruction_item>
+            <opcode>REX.W + 15 id</opcode>
+            <instruction>ADC RAX,imm32</instruction>
+            <operand_encoding>I</operand_encoding>
+            <mode_64_bit>Valid</mode_64_bit>
+            <mode_compat_leg>N.E.</mode_compat_leg>
+            <description>Add with carry imm32 sign extended to 64-bits to RAX</description>
+        </instruction_item>
+        <instruction_item>
+            <opcode>80 /2 ib</opcode>
+            <instruction>ADC r/m8,imm8</instruction>
+            <operand_encoding>MI</operand_encoding>
+            <mode_64_bit>Valid</mode_64_bit>
+            <mode_compat_leg>Valid</mode_compat_leg>
+            <description>Add with carry imm8 to r/m8</description>
+        </instruction_item>
+        <instruction_item>
+            <opcode>REX + 80 /2 ib</opcode>
+            <instruction>ADC r/m8,imm8</instruction>
+            <operand_encoding>MI</operand_encoding>
+            <mode_64_bit>Valid</mode_64_bit>
+            <mode_compat_leg>N.E.</mode_compat_leg>
+            <description>Add with carry imm8 to r/m8</description>
+        </instruction_item>
+        <instruction_item>
+            <opcode>81 /2 iw</opcode>
+            <instruction>ADC r/m16,imm16</instruction>
+            <operand_encoding>MI</operand_encoding>
+            <mode_64_bit>Valid</mode_64_bit>
+            <mode_compat_leg>Valid</mode_compat_leg>
+            <description>Add with carry imm16 to r/m16</description>
+        </instruction_item>
+        <instruction_item>
+            <opcode>81 /2 id</opcode>
+            <instruction>ADC r/m32,imm32</instruction>
+            <operand_encoding>MI</operand_encoding>
+            <mode_64_bit>Valid</mode_64_bit>
+            <mode_compat_leg>Valid</mode_compat_leg>
+        </instruction_item>
+    </instruction_same_name>
+    
+    <instruction_item>
+        <opcode>F8</opcode>
+        <instruction>CLC</instruction>
+        <operand_encoding>ZO</operand_encoding>
+        <mode_64_bit>Valid</mode_64_bit>
+        <mode_compat_leg>Valid</mode_compat_leg>
+        <description>Clear CF flag</description>
+    </instruction_item>
+</instruction_set>
