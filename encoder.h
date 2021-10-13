@@ -1,0 +1,1 @@
+//encoder get a binary instruction using instruction set table and a index to that instruction and a instruction.

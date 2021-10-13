@@ -31,7 +31,10 @@
     <instruction_same_name>
         <instruction_item>
             <opcode>14 ib</opcode>
-            <instruction>ADC AL,imm8</instruction>
+            <instruction>
+                <mnemonic>ADC</mnemonic>
+                <arguments>AL,imm8</arguments>
+            </instruction>
             <operand_encoding>I</operand_encoding>
             <mode_64_bit>Valid</mode_64_bit>
             <mode_compat_leg>Valid</mode_compat_leg>
@@ -39,7 +42,10 @@
         </instruction_item>
         <instruction_item>
             <opcode>15 iw</opcode>
-            <instruction>ADC AX,imm16</instruction>
+            <instruction>
+                <mnemonic>ADC</mnemonic>
+                <arguments>AX,imm16</arguments>
+            </instruction>
             <operand_encoding>I</operand_encoding>
             <mode_64_bit>Valid</mode_64_bit>
             <mode_compat_leg>Valid</mode_compat_leg>
@@ -47,7 +53,10 @@
         </instruction_item>
         <instruction_item>
             <opcode>15 id</opcode>
-            <instruction>ADC EAX,imm32</instruction>
+            <instruction>
+                <mnemonic>ADC</mnemonic>
+                <arguments>EAX,imm32</arguments>
+            </instruction>
             <operand_encoding>I</operand_encoding>
             <mode_64_bit>Valid</mode_64_bit>
             <mode_compat_leg>Valid</mode_compat_leg>
@@ -55,7 +64,10 @@
         </instruction_item>
         <instruction_item>
             <opcode>REX.W + 15 id</opcode>
-            <instruction>ADC RAX,imm32</instruction>
+            <instruction>
+                <mnemonic>ADC</mnemonic>
+                <arguments>RAX,imm32</arguments>
+            </instruction>
             <operand_encoding>I</operand_encoding>
             <mode_64_bit>Valid</mode_64_bit>
             <mode_compat_leg>N.E.</mode_compat_leg>
@@ -63,7 +75,10 @@
         </instruction_item>
         <instruction_item>
             <opcode>80 /2 ib</opcode>
-            <instruction>ADC r/m8,imm8</instruction>
+            <instruction>
+                <mnemonic>ADC</mnemonic>
+                <arguments>r/m8,imm8</arguments>
+            </instruction>
             <operand_encoding>MI</operand_encoding>
             <mode_64_bit>Valid</mode_64_bit>
             <mode_compat_leg>Valid</mode_compat_leg>
@@ -71,7 +86,10 @@
         </instruction_item>
         <instruction_item>
             <opcode>REX + 80 /2 ib</opcode>
-            <instruction>ADC r/m8,imm8</instruction>
+            <instruction>
+                <mnemonic>ADC</mnemonic>
+                <arguments>r/m8,imm8</arguments>
+            </instruction>
             <operand_encoding>MI</operand_encoding>
             <mode_64_bit>Valid</mode_64_bit>
             <mode_compat_leg>N.E.</mode_compat_leg>
@@ -79,7 +97,10 @@
         </instruction_item>
         <instruction_item>
             <opcode>81 /2 iw</opcode>
-            <instruction>ADC r/m16,imm16</instruction>
+            <instruction>
+                <mnemonic>ADC</mnemonic>
+                <arguments>r/m16,imm16</arguments>
+            </instruction>
             <operand_encoding>MI</operand_encoding>
             <mode_64_bit>Valid</mode_64_bit>
             <mode_compat_leg>Valid</mode_compat_leg>
@@ -87,16 +108,21 @@
         </instruction_item>
         <instruction_item>
             <opcode>81 /2 id</opcode>
-            <instruction>ADC r/m32,imm32</instruction>
+            <instruction>
+                <mnemonic>ADC</mnemonic>
+                <arguments>r/m32,imm32</arguments>
+            </instruction>
             <operand_encoding>MI</operand_encoding>
             <mode_64_bit>Valid</mode_64_bit>
             <mode_compat_leg>Valid</mode_compat_leg>
         </instruction_item>
     </instruction_same_name>
-    
+
     <instruction_item>
         <opcode>F8</opcode>
-        <instruction>CLC</instruction>
+        <instruction>
+            <mnemonic>CLC</mnemonic>
+        </instruction>
         <operand_encoding>ZO</operand_encoding>
         <mode_64_bit>Valid</mode_64_bit>
         <mode_compat_leg>Valid</mode_compat_leg>
