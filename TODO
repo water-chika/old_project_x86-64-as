@@ -1,0 +1,5 @@
+Write operand lexer.
+Write mnemonic lexer.
+Write encoder.
+
+Write ELF container.

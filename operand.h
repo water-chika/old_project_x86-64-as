@@ -1,40 +1,20 @@
-enum operand_class
+#include <stdint.h>
+typedef enum{
+OPERAND_IMM8,
+OPERAND_IMM16,
+OPERAND_IMM32,
+OPERAND_R8,
+OPERAND_R16,
+OPERAND_R32,
+}operand_type_t;
+typedef struct 
 {
-    rel8,
-    rel16,
-    rel32,
-    ptr16_16,
-    ptr16_32,
-    r8,
-    r16,
-    r32,
-    r64,
-    imm8,
-    imm16,
-    imm32,
-    imm64,
-    r_m8,
-    r_m16,
-    r_m32,
-    r_m64,
-    reg,
-    m,
-    m8,
-    m16,
-    m32,
-    m64,
-    m128,
-    m16_16,m16_32,m16_64,
-    m16_and_32, m16_and_16, m32_and_32, m16_and_64,
-    m80bcd,
-    moffs8,moffs16,moffs32,moffs64,
-    sreg,
-    m32fp,m64fp,m80fp,
-    m16int,m32int,m64int,
-    st,
-    mm,
-    mm_m32,
+    int64_t encode;
+    int set_size;
+    operand_type_t operand_type[0];
+}operand_set_t;
 
-};
-typedef int operand_t;
+
 typedef int operand_set_t;
+
+operand_set_t lex_operand(const char* operand_string);

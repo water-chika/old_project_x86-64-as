@@ -1,3 +1,6 @@
+#ifndef LEXER_H
+#define LEXER_H
+
 #include "operand.h"
 #include "mnemonic.h"
 typedef struct
@@ -12,4 +15,6 @@ typedef struct
 //So the instruction do not contain label.
 //Because a assembly instruction string may be map to multi low level binary instruction,
 // returned result is a set;
-lexed_instruction_t lex(const char* instruction);
+lexed_instruction_t lex_instruction(const char* instruction);
+
+#endif
