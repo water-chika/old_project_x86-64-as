@@ -4,4 +4,4 @@ typedef enum
     MNEMONIC_CLC,
 }mnemonic_t;
 
-mnemonic_t get_mnemonic(const char* mnemonic_string);
+mnemonic_t lex_mnemonic(const char* mnemonic_string);

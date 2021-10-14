@@ -6,7 +6,8 @@
 typedef struct
 {
     mnemonic_t mnemonic;
-    operand_set_t operand[4];
+    int operand_num;
+    operand_t operand[4];
 }lexed_instruction_t;
 
 
