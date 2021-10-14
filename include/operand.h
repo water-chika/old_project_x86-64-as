@@ -1,21 +1,39 @@
+#ifndef OPERAND_H
+#define OPERAND_H
+
+#include "immediate.h"
+#include "register.h"
 #include <stdint.h>
+
 typedef enum{
+OPERAND_rel8,
+OPERAND_rel16,
+OPERAND_rel32,
 OPERAND_imm8,
 OPERAND_imm16,
 OPERAND_imm32,
 
-OPERAND_AX,OPERAND_CX,OPERAND_DX,OPERAND_BX,OPERAND_SP,OPERAND_BP,OPERAND_SI,OPERAND_BI,
-OPERAND_R8,OPERAND_R9,OPERAND_R10,OPERAND_R11,OPERAND_R12,OPERAND_R13,OPERAND_R14,OPERAND_R15,
 OPERAND_r8,
 OPERAND_r16,
 OPERAND_r32,
+}operand_symbol_t;
+
+typedef enum
+{
+    OPERAND_IMMEDIATE,
+    OPERAND_REGISTER,
+    OPERAND_MEMORY,
 }operand_type_t;
 typedef struct 
 {
-    int64_t encode;
-    int set_size;
-    operand_type_t operand_type[0];
-}operand_set_t;
+    operand_type_t type;
+    union{
+        immediate_t imm;
+        x86_64_register_t reg;
+    };
+}operand_t;
 
 
-operand_set_t lex_operand(const char* operand_string);
+operand_t lex_operand(const char* operand_string);
+
+#endif
