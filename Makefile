@@ -1,5 +1,5 @@
 as: as.c lexer.c encoder.c
-	gcc -o as as.c lexer.c encoder.c
+	gcc -Iinclude -o as as.c lexer.c encoder.c
 
 loader: loader.c
-	gcc -o loader loader.c
+	gcc -Iinclude -o loader loader.c
