@@ -2,4 +2,4 @@ Write operand lexer.
 Write mnemonic lexer.
 Write encoder.
 
-Write ELF container.
+Write a loader that will load binary code to memory and run.
