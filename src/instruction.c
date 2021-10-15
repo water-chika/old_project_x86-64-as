@@ -2,15 +2,15 @@
 #include <stdio.h>
 
 instruction_item_t instruction_items[] = {
-    {MNEMONIC_ADC, 2, {{OPERAND_CONSTANT_REGISTER,REGISTER_AX}, {OPERAND_imm16}}},
-    {MNEMONIC_ADC, 2, {{OPERAND_CONSTANT_REGISTER, REGISTER_AL}, {OPERAND_imm8}}},
-    {MNEMONIC_ADC, 2, {{OPERAND_CONSTANT_REGISTER, REGISTER_EAX}, {OPERAND_imm32}}},
-    {MNEMONIC_ADC, 2, {{OPERAND_CONSTANT_REGISTER, REGISTER_RAX}, {OPERAND_imm32}}},
-    {MNEMONIC_ADC, 2, {{OPERAND_r_m8}, {OPERAND_imm8}}},
-    {MNEMONIC_ADC, 2, {{OPERAND_r_m16}, {OPERAND_imm16}}},
-    {MNEMONIC_ADC, 2, {{OPERAND_r_m32}, {OPERAND_imm32}}},
+    {{1,0x14,.ib=1},MNEMONIC_ADC, 2, {{OPERAND_CONSTANT_REGISTER, REGISTER_AL}, {OPERAND_imm8}}},
+    {{1,0x15, .iw=1},MNEMONIC_ADC, 2, {{OPERAND_CONSTANT_REGISTER,REGISTER_AX}, {OPERAND_imm16}}},
+    {{1,0x15, .id=1},MNEMONIC_ADC, 2, {{OPERAND_CONSTANT_REGISTER, REGISTER_EAX}, {OPERAND_imm32}}},
+    {{1,0x15, .id=1, .REX_W=1},MNEMONIC_ADC, 2, {{OPERAND_CONSTANT_REGISTER, REGISTER_RAX}, {OPERAND_imm32}}},
+    {{1,0x80, .e_digit=1, .digit=2, .ib=1},MNEMONIC_ADC, 2, {{OPERAND_r_m8}, {OPERAND_imm8}}},
+    {{1,0x81, .e_digit=1, .digit=2, .iw=1},MNEMONIC_ADC, 2, {{OPERAND_r_m16}, {OPERAND_imm16}}},
+    {{1,0x81, .e_digit=1, .digit=2, .id=1},MNEMONIC_ADC, 2, {{OPERAND_r_m32}, {OPERAND_imm32}}},
 
-    {MNEMONIC_CLC, 0,{}},
+    {{1,0xf8},MNEMONIC_CLC, 0,{}},
 };
 
 instruction_item_t get_instruction_item(lexed_instruction_t lexed_instruction)

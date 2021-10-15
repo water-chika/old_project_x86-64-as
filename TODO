@@ -1,5 +1,7 @@
 Write operand lexer.
 Write mnemonic lexer.
+Write instruction lexer.
+Write intruction item searcher.
 Write encoder.
 
 Write a loader that will load binary code to memory and run.

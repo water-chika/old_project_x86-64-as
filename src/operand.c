@@ -88,7 +88,7 @@ int belong_operand_class(operand_t operand, operand_class_t operand_class)
         return operand.type == OPERAND_IMMEDIATE && -32768 <= operand.imm && operand.imm <= 32767;
         break;
         case OPERAND_imm32:
-        return operand.type == OPERAND_IMMEDIATE && -2147483648 <= operand.imm && operand.imm <=-2147483647;
+        return operand.type == OPERAND_IMMEDIATE && -2147483648 <= operand.imm && operand.imm <=2147483647;
         break;
         default:
         return 0;
