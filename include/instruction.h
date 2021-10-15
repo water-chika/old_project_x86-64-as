@@ -1,17 +1,16 @@
 #include <stdint.h>
-typedef uint8_t byte_t;
-typedef struct
+#include "register.h"
+#include "operand.h"
+#include "mnemonic.h"
+#include "lexer.h"
+
+typedef struct 
 {
+	mnemonic_t mnemonic;
+	int operand_num;
+	operand_class_t operand[4];
+}instruction_item_t;
 
-} instruction_t;
+instruction_item_t get_instruction_item(lexed_instruction_t lexed_instruction);
 
-#define instruction_assert(instruction)            \
-	assert(instruction.code_size <= 15 &&          \
-		   instruction.code_size ==                \
-			   instruction.legacy_prefixes_size +  \
-				   instruction.rex_prefix_size +   \
-				   instruction.opcode_size +       \
-				   instruction.mod_r_m_size +      \
-				   instruction.sib_size +          \
-				   instruction.displacement_size + \
-				   instruction.immediate_size);
+int print_instruction_item(instruction_item_t instruction_item);
