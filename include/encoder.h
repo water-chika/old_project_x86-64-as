@@ -6,8 +6,22 @@
 #include <stdint.h>
 
 typedef uint8_t opcode_t;
-typedef uint8_t rex_prefix_t;
-typedef uint8_t mod_r_m_t;
+typedef struct 
+{
+	uint8_t B : 1;
+	uint8_t X : 1;
+	uint8_t R : 1;
+	uint8_t W : 1;
+	uint8_t fix_code : 4;
+}rex_prefix_t;
+
+typedef struct 
+{
+	uint8_t RM : 3;
+	uint8_t REG : 3;
+	uint8_t Mod : 2;
+}mod_r_m_t;
+
 typedef uint8_t sib_t;
 typedef int64_t displacement_t;
 typedef struct 
@@ -44,16 +58,16 @@ typedef enum
 
 typedef struct 
 {
-	int exist_group1_prefix : 1;
-	int exist_group2_prefix : 1;
-	int exist_group3_prefix : 1;
-	int exist_group4_prefix : 1;
-	int exist_rex_prefix : 1;
-	int opcode_num : 2;
-	int exist_mod_r_m : 1;
-	int exist_sib : 1;
-	int exist_displacement : 1;
-	int exist_immediate : 1;
+	uint8_t exist_group1_prefix : 1;
+	uint8_t exist_group2_prefix : 1;
+	uint8_t exist_group3_prefix : 1;
+	uint8_t exist_group4_prefix : 1;
+	uint8_t exist_rex_prefix : 1;
+	uint8_t opcode_num : 2;
+	uint8_t exist_mod_r_m : 1;
+	uint8_t exist_sib : 1;
+	uint8_t exist_displacement : 1;
+	uint8_t exist_immediate : 1;
 
 	group1_prefix_t group1_prefix;
 	group2_prefix_t group2_prefix;
@@ -62,7 +76,7 @@ typedef struct
 	rex_prefix_t rex;
 	opcode_t opcode[4];
 	mod_r_m_t mod_r_m;
-	sib_t sib_t;
+	sib_t sib;
 	displacement_t displacement;
 	encoded_immediate_t immediate;
 }encoded_instruction_t;

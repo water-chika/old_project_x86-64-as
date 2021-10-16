@@ -1,16 +1,36 @@
 #include "instruction.h"
 #include <stdio.h>
+#include <assert.h>
 
 instruction_item_t instruction_items[] = {
-    {{1,0x14,.ib=1},MNEMONIC_ADC, 2, {{OPERAND_CONSTANT_REGISTER, REGISTER_AL}, {OPERAND_imm8}}},
-    {{1,0x15, .iw=1},MNEMONIC_ADC, 2, {{OPERAND_CONSTANT_REGISTER,REGISTER_AX}, {OPERAND_imm16}}},
-    {{1,0x15, .id=1},MNEMONIC_ADC, 2, {{OPERAND_CONSTANT_REGISTER, REGISTER_EAX}, {OPERAND_imm32}}},
-    {{1,0x15, .id=1, .REX_W=1},MNEMONIC_ADC, 2, {{OPERAND_CONSTANT_REGISTER, REGISTER_RAX}, {OPERAND_imm32}}},
-    {{1,0x80, .e_digit=1, .digit=2, .ib=1},MNEMONIC_ADC, 2, {{OPERAND_r_m8}, {OPERAND_imm8}}},
-    {{1,0x81, .e_digit=1, .digit=2, .iw=1},MNEMONIC_ADC, 2, {{OPERAND_r_m16}, {OPERAND_imm16}}},
-    {{1,0x81, .e_digit=1, .digit=2, .id=1},MNEMONIC_ADC, 2, {{OPERAND_r_m32}, {OPERAND_imm32}}},
+    {{1,0x14,.ib=1},MNEMONIC_ADC, 
+        2, {{OPERAND_CONSTANT_REGISTER, REGISTER_AL}, {OPERAND_imm8}},
+        .operand_encoding=INSTRUCTION_OPERAND_ENCODING_I},
+    {{1,0x15, .iw=1},MNEMONIC_ADC, 
+        2, {{OPERAND_CONSTANT_REGISTER,REGISTER_AX}, {OPERAND_imm16}}, 
+        .operand_encoding=INSTRUCTION_OPERAND_ENCODING_I},
+    {{1,0x15, .id=1},MNEMONIC_ADC, 
+        2, {{OPERAND_CONSTANT_REGISTER, REGISTER_EAX}, {OPERAND_imm32}},
+        .operand_encoding=INSTRUCTION_OPERAND_ENCODING_I},
+    {{1,0x15, .id=1, .REX_W=1},MNEMONIC_ADC,
+        2, {{OPERAND_CONSTANT_REGISTER, REGISTER_RAX}, {OPERAND_imm32}},
+        .operand_encoding=INSTRUCTION_OPERAND_ENCODING_I},
+    {{1,0x80, .e_digit=1, .digit=2, .ib=1},MNEMONIC_ADC, 
+        2, {{OPERAND_r_m8_compat}, {OPERAND_imm8}},
+        .operand_encoding=INSTRUCTION_OPERAND_ENCODING_MI},
+    {{1,0x80, .e_digit=1, .digit=2, .ib=1, .exist_REX=1},MNEMONIC_ADC, 
+        2, {{OPERAND_r_m8}, {OPERAND_imm8}},
+        .operand_encoding=INSTRUCTION_OPERAND_ENCODING_MI},
+    {{1,0x81, .e_digit=1, .digit=2, .iw=1},MNEMONIC_ADC, 
+        2, {{OPERAND_r_m16}, {OPERAND_imm16}},
+        .operand_encoding=INSTRUCTION_OPERAND_ENCODING_MI},
+    {{1,0x81, .e_digit=1, .digit=2, .id=1},MNEMONIC_ADC, 
+        2, {{OPERAND_r_m32}, {OPERAND_imm32}},
+        .operand_encoding=INSTRUCTION_OPERAND_ENCODING_MI},
 
-    {{1,0xf8},MNEMONIC_CLC, 0,{}},
+    {{1,0xf8},MNEMONIC_CLC, 
+        0,{},
+        .operand_encoding=INSTRUCTION_OPERAND_ENCODING_ZO},
 };
 
 instruction_item_t get_instruction_item(lexed_instruction_t lexed_instruction)
@@ -33,8 +53,7 @@ instruction_item_t get_instruction_item(lexed_instruction_t lexed_instruction)
             if (flag == 1)return instruction_item;
         }
     }
-    fprintf(stderr, "Unknown instruction\n");
-    exit(-1);
+    assert(0);
 }
 
 int print_instruction_item(instruction_item_t instruction_item)

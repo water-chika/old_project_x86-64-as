@@ -4,16 +4,33 @@
 #include <stdlib.h>
 #include <assert.h>
 
+typedef struct 
+{
+    const char* str;
+    x86_64_register_t reg;
+}register_string_map_t;
+
 register_string_map_t register_string_map[] = {
     {"AL", REGISTER_AL}, {"BL", REGISTER_BL}, {"CL", REGISTER_CL}, {"DL",REGISTER_DL},
+    {"AH", REGISTER_AH}, {"BH", REGISTER_BH}, {"CH", REGISTER_CH}, {"DH",REGISTER_DH},
+    {"BPL",REGISTER_BPL},{"SPL",REGISTER_SPL},{"DIL",REGISTER_DIL},{"SIL",REGISTER_SIL},
+    {"R8B",REGISTER_R8B},{"R9B",REGISTER_R9B},{"R10B",REGISTER_R10B},{"R11B",REGISTER_R11B},
+    {"R12B",REGISTER_R12B},{"R13B",REGISTER_R13B},{"R14B",REGISTER_R14B},{"R15B",REGISTER_R15B},
     
     {"AX", REGISTER_AX},{"BX", REGISTER_BX},{"CX", REGISTER_CX},{"DX", REGISTER_DX},
     {"SP", REGISTER_SP},{"BP", REGISTER_BP},{"SI", REGISTER_SI},{"DI", REGISTER_DI},
-    {"R8", REGISTER_R8},{"R9", REGISTER_R9},{"R10", REGISTER_R10},{"R11", REGISTER_R11},
-    {"R12", REGISTER_R12},{"R13", REGISTER_R13},{"R14", REGISTER_R14},{"R15", REGISTER_R15},
+    {"R8W", REGISTER_R8W},{"R9W", REGISTER_R9W},{"R10W", REGISTER_R10W},{"R11W", REGISTER_R11W},
+    {"R12W", REGISTER_R12W},{"R13W", REGISTER_R13W},{"R14W", REGISTER_R14W},{"R15W", REGISTER_R15W},
 
     {"EAX", REGISTER_EAX},{"ECX", REGISTER_ECX}, {"EDX", REGISTER_EDX}, {"EBX", REGISTER_EBX},
     {"EBP", REGISTER_EBP},{"ESP", REGISTER_ESP}, {"ESI", REGISTER_ESI}, {"EDI", REGISTER_EDI},
+    {"R8D",REGISTER_R8D},{"R9D",REGISTER_R9D},{"R10D",REGISTER_R10D},{"R11D",REGISTER_R11D},
+    {"R12D",REGISTER_R12D},{"R13D",REGISTER_R13D},{"R14D",REGISTER_R14D},{"R15D",REGISTER_R15D},
+
+    {"RAX", REGISTER_RAX}, {"RCX", REGISTER_RCX}, {"RDX", REGISTER_RDX}, {"RBX", REGISTER_RBX},
+    {"RSP", REGISTER_RSP}, {"RBP", REGISTER_RBP}, {"RSI", REGISTER_RSI}, {"RDI", REGISTER_RDI},
+    {"R8",REGISTER_R8},{"R9",REGISTER_R9},{"R10",REGISTER_R10},{"R11",REGISTER_R11},
+    {"R12",REGISTER_R12},{"R13",REGISTER_R13},{"R14",REGISTER_R14},{"R15",REGISTER_R15},
 };
 int cmp_register_string_map_str(const void* a, const void* b)
 {
@@ -49,4 +66,76 @@ void print_register(x86_64_register_t reg)
         cmp_register_string_map_reg);
     assert(result);
     printf("%s", result->str);
+}
+
+int belong_to_register_class(x86_64_register_t reg, x86_64_register_class_t reg_class)
+{
+    if (reg_class == REGISTER_CLASS_R8)
+    {
+        switch (reg)
+        {
+            case REGISTER_AL:case REGISTER_CL:case REGISTER_DL:case REGISTER_BL:
+            case REGISTER_BPL:case REGISTER_SPL:case REGISTER_SIL:case REGISTER_DIL:
+            case REGISTER_R8B:case REGISTER_R9B:case REGISTER_R10B:case REGISTER_R11B:
+            case REGISTER_R12B:case REGISTER_R13B:case REGISTER_R14B:case REGISTER_R15B:
+                return 1;
+            default:
+                return 0;
+        }
+    }
+    else if (reg_class == REGISTER_CLASS_R8_COMPAT)
+    {
+        switch (reg)
+        {
+            case REGISTER_AL:case REGISTER_CL:case REGISTER_DL:case REGISTER_BL:
+            case REGISTER_AH:case REGISTER_CH:case REGISTER_DH:case REGISTER_BH:
+            return 1;
+            default:
+            return 0;
+        }
+    }
+    else if (reg_class == REGISTER_CLASS_R16)
+    {
+        switch (reg)
+        {
+            case REGISTER_AX:case REGISTER_CX:case REGISTER_DX:case REGISTER_BX:
+            case REGISTER_SP:case REGISTER_BP:case REGISTER_SI:case REGISTER_DI:
+            case REGISTER_R8W:case REGISTER_R9W:case REGISTER_R10W:case REGISTER_R11W:
+            case REGISTER_R12W:case REGISTER_R13W:case REGISTER_R14W:case REGISTER_R15W:
+            return 1;
+            default:
+            return 0;
+        }
+    }
+    else if (reg_class == REGISTER_CLASS_R32)
+    {
+        switch (reg)
+        {
+            case REGISTER_EAX:case REGISTER_ECX:case REGISTER_EDX:case REGISTER_EBX:
+            case REGISTER_ESP:case REGISTER_EBP:case REGISTER_ESI:case REGISTER_EDI:
+            case REGISTER_R8D:case REGISTER_R9D:case REGISTER_R10D:case REGISTER_R11D:
+            case REGISTER_R12D:case REGISTER_R13D:case REGISTER_R14D:case REGISTER_R15D:
+            return 1;
+            default:
+            return 0;
+        }
+    }
+    else if (reg_class == REGISTER_CLASS_R64)
+    {
+        switch (reg)
+        {
+            case REGISTER_RAX:case REGISTER_RCX:case REGISTER_RDX:case REGISTER_RBX:
+            case REGISTER_RSP:case REGISTER_RBP:case REGISTER_RSI:case REGISTER_RDI:
+            case REGISTER_R8:case REGISTER_R9:case REGISTER_R10:case REGISTER_R11:
+            case REGISTER_R12:case REGISTER_R13:case REGISTER_R14:case REGISTER_R15:
+            return 1;
+            default:
+            return 0;
+        }
+    }
+    else
+    {
+        fprintf(stderr, "Unknown register class\n");
+        assert(0);
+    }
 }
