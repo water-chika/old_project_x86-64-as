@@ -62,6 +62,8 @@ int belong_operand_class(operand_t operand, operand_class_t operand_class)
         break;
         case OPERAND_r32:
         return belong_r32(operand);
+        case OPERAND_r64:
+        return operand.type == OPERAND_REGISTER && belong_to_register_class(operand.reg, REGISTER_CLASS_R64);
 
         case OPERAND_CONSTANT_REGISTER:
         return operand.type == OPERAND_REGISTER && operand_class.reg == operand.reg;
@@ -74,6 +76,8 @@ int belong_operand_class(operand_t operand, operand_class_t operand_class)
         return belong_r16(operand) || operand.type == OPERAND_MEMORY;
         case OPERAND_r_m32:
         return belong_r32(operand) || operand.type == OPERAND_MEMORY;
+        case OPERAND_r_m64:
+        return operand.type == OPERAND_MEMORY || operand.type == OPERAND_REGISTER && belong_to_register_class(operand.reg, REGISTER_CLASS_R64);
 
         case OPERAND_imm8:
         return operand.type == OPERAND_IMMEDIATE && -128 <= operand.imm && operand.imm <= 127;
@@ -85,7 +89,7 @@ int belong_operand_class(operand_t operand, operand_class_t operand_class)
         return operand.type == OPERAND_IMMEDIATE && -2147483648 <= operand.imm && operand.imm <=2147483647;
         break;
         default:
-        return 0;
+        assert(0);
         break;
     }
 }

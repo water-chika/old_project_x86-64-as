@@ -40,8 +40,6 @@ encoded_instruction_t encode_instruction(instruction_item_t instruction_item, le
     };
     if (instruction_opcode.iw){
         encoded_instruction.exist_immediate = 1;
-        encoded_instruction.exist_group3_prefix = 1;
-        encoded_instruction.group3_prefix = GROUP3_PREFIX_OPERAND_SIZE_OVERRIDE;
         encoded_instruction.immediate.byte_num = 2;
         for (int i = 0; i < lexed_instruction.operand_num; i++)
         {
@@ -65,10 +63,17 @@ encoded_instruction_t encode_instruction(instruction_item_t instruction_item, le
     if (instruction_item.operand_encoding == INSTRUCTION_OPERAND_ENCODING_MI)
     {
         address_encoding_t address_encoding = encode_address(lexed_instruction.operand[0]);
-        if (address_encoding.exist_rex)encoded_instruction.exist_rex_prefix = 1;
+        if (address_encoding.exist_operand_size_prefix)
+        {
+            encoded_instruction.exist_group3_prefix = 1;
+            encoded_instruction.group3_prefix = GROUP3_PREFIX_OPERAND_SIZE_OVERRIDE;
+        }
+        encoded_instruction.exist_rex_prefix |= address_encoding.exist_rex;
+        encoded_instruction.rex.B = address_encoding.rex_b;
+        encoded_instruction.rex.W = address_encoding.rex_w;
         encoded_instruction.mod_r_m.Mod = address_encoding.mod;
         encoded_instruction.mod_r_m.RM = address_encoding.r_m;
-        encoded_instruction.exist_sib=address_encoding.exist_sib;
+        encoded_instruction.exist_sib |= address_encoding.exist_sib;
         encoded_instruction.sib = address_encoding.sib;
     }
     else if (instruction_item.operand_encoding == INSTRUCTION_OPERAND_ENCODING_ZO)
