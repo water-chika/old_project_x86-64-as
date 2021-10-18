@@ -1,7 +1,9 @@
-Write operand lexer.
-Write mnemonic lexer.
-Write instruction lexer.
-Write intruction item searcher.
-Write encoder.
+current work:
+	Write another project resolve ELF file format.
 
-Write a loader that will load binary code to memory and run.
+Had begin and need complete:
+	operand lexer
+	mnemonic lexer
+	instruction lexer
+	intruction item searcher
+	encoder

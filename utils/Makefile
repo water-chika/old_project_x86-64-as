@@ -1,5 +1,7 @@
-all: get_register_code get_immediate_code get_operand_code get_instruction_code get_instruction_symbol \
+programs = get_register_code get_immediate_code get_operand_code get_instruction_code get_instruction_symbol \
 	get_encoded_instruction simple_as loader
+all : ${programs}
+
 get_register_code: get_register_code.c libx86_64_as.a
 	gcc -I../include -o get_register_code get_register_code.c libx86_64_as.a
 
@@ -34,5 +36,6 @@ loader : loader.c
 	gcc -o loader loader.c
 
 clean:
-	rm -f get_immediate_code get_register_code get_operand_code get_instruction_code \
-		get_encoded_instruction
+	rm -f ${programs}
+	rm -f *.o
+	rm -f libx86_64_as.a
