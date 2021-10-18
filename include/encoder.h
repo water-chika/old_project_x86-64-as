@@ -81,7 +81,17 @@ typedef struct
 	encoded_immediate_t immediate;
 }encoded_instruction_t;
 
+typedef struct 
+{
+	int size;
+	uint8_t bytes[15];
+}binary_instruction_t;
+
+
 encoded_instruction_t encode_instruction(instruction_item_t instruction_item, lexed_instruction_t lexed_instruction);
+
+binary_instruction_t generate_binary_instruction(encoded_instruction_t encoded_instruction);
+
 
 void print_encoded_instruction(encoded_instruction_t encoded_instruction);
 

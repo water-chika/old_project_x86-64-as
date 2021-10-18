@@ -139,3 +139,37 @@ int belong_to_register_class(x86_64_register_t reg, x86_64_register_class_t reg_
         assert(0);
     }
 }
+
+int encode_register_in_register_class(x86_64_register_t reg)
+{
+
+    switch (reg)
+    {
+        case REGISTER_AL:case REGISTER_AX:case REGISTER_EAX:case REGISTER_RAX:
+            return 0;
+            break;
+        case REGISTER_CL:case REGISTER_CX:case REGISTER_ECX:case REGISTER_RCX:
+            return 1;
+            break;
+        case REGISTER_DL:case REGISTER_DX:case REGISTER_EDX:case REGISTER_RDX:
+            return 2;
+            break;
+        case REGISTER_BL:case REGISTER_BX:case REGISTER_EBX:case REGISTER_RBX:
+            return 3;
+            break;
+        case REGISTER_AH:case REGISTER_SPL:case REGISTER_SP:case REGISTER_ESP:case REGISTER_RSP:
+            return 4;
+            break;
+        case REGISTER_CH:case REGISTER_BPL:case REGISTER_BP:case REGISTER_EBP:case REGISTER_RBP:
+            return 5;
+            break;
+        case REGISTER_DH:case REGISTER_SIL:case REGISTER_SI:case REGISTER_ESI:case REGISTER_RSI:
+            return 6;
+            break;
+        case REGISTER_BH:case REGISTER_DIL:case REGISTER_DI:case REGISTER_EDI:case REGISTER_RDI:
+            return 7;
+            break;
+    }
+    assert(0);
+    return -1;
+}

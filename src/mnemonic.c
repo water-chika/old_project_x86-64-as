@@ -13,6 +13,7 @@ typedef struct
 mnemonic_map_string_t mnemonic_map_string[] = {
     {"ADC", MNEMONIC_ADC},
     {"CLC", MNEMONIC_CLC},
+    {"RET", MNEMONIC_RET},
 };
 
 int cmp_mnemonic_map_string_str(const void* a, const void* b)

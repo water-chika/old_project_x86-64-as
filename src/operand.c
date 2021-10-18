@@ -99,6 +99,9 @@ int print_operand_class(operand_class_t operand_class)
     const char* symbol_string = "";
     switch (operand_class.symbol)
     {
+        case OPERAND_r8_compat:
+        symbol_string = "r8_compat";
+        break;
         case OPERAND_r8:
         symbol_string = "r8";
         break;

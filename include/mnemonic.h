@@ -5,6 +5,7 @@ typedef enum
 {
     MNEMONIC_ADC,
     MNEMONIC_CLC,
+    MNEMONIC_RET,
 }mnemonic_t;
 
 mnemonic_t lex_mnemonic(const char* mnemonic_string);
