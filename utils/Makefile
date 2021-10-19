@@ -1,26 +1,24 @@
 programs = get_register_code get_immediate_code get_operand_code get_instruction_code get_instruction_symbol \
-	get_encoded_instruction simple_as loader
+	get_encoded_instruction simple_as
 all : ${programs}
 
 get_register_code: get_register_code.c libx86_64_as.a
 	gcc -I../include -o get_register_code get_register_code.c libx86_64_as.a
 
-get_immediate_code: get_immediate_code.c ../src/immediate.c ../include/immediate.h
-	gcc -I../include -o get_immediate_code get_immediate_code.c ../src/immediate.c
+get_immediate_code: get_immediate_code.c libx86_64_as.a
+	gcc -I../include -o get_immediate_code get_immediate_code.c libx86_64_as.a
 
-get_operand_code: get_operand_code.c ../src/operand.c ../src/immediate.c ../src/register.c
-	gcc -I../include -o get_operand_code get_operand_code.c ../src/operand.c ../src/immediate.c ../src/register.c
+get_operand_code: get_operand_code.c libx86_64_as.a
+	gcc -I../include -o get_operand_code get_operand_code.c libx86_64_as.a
 
-get_instruction_code: get_instruction_code.c ../src/lexer.c ../src/mnemonic.c ../src/operand.c ../src/immediate.c ../src/register.c
-	gcc -I../include -o get_instruction_code get_instruction_code.c ../src/lexer.c ../src/mnemonic.c ../src/operand.c ../src/immediate.c ../src/register.c
+get_instruction_code: get_instruction_code.c libx86_64_as.a
+	gcc -I../include -o get_instruction_code get_instruction_code.c libx86_64_as.a
 
-get_instruction_symbol: get_instruction_symbol.c ../src/instruction.c ../src/lexer.c ../src/mnemonic.c ../src/operand.c ../src/immediate.c ../src/register.c
-	gcc -I../include -o get_instruction_symbol get_instruction_symbol.c ../src/lexer.c ../src/mnemonic.c ../src/operand.c ../src/immediate.c ../src/register.c ../src/instruction.c
+get_instruction_symbol: get_instruction_symbol.c libx86_64_as.a
+	gcc -I../include -o get_instruction_symbol get_instruction_symbol.c libx86_64_as.a
 
-get_encoded_instruction: get_encoded_instruction.c ../src/encoder.c ../src/instruction.c ../src/lexer.c ../src/mnemonic.c \
-		../src/operand.c ../src/immediate.c ../src/register.c ../src/address_encoding.c
-	gcc -I../include -o get_encoded_instruction get_encoded_instruction.c ../src/encoder.c ../src/instruction.c \
-		../src/lexer.c ../src/mnemonic.c ../src/operand.c ../src/immediate.c ../src/register.c ../src/address_encoding.c
+get_encoded_instruction: get_encoded_instruction.c libx86_64_as.a
+	gcc -I../include -o get_encoded_instruction get_encoded_instruction.c libx86_64_as.a
 
 libx86_64_as.a : ../src/encoder.c ../src/instruction.c ../src/lexer.c ../src/mnemonic.c \
 			../src/operand.c ../src/immediate.c ../src/register.c ../src/address_encoding.c
