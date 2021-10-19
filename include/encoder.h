@@ -27,7 +27,7 @@ typedef int64_t displacement_t;
 typedef struct 
 {
 	int byte_num;
-	uint64_t imm;
+	immediate_t imm;
 }encoded_immediate_t;
 
 typedef enum

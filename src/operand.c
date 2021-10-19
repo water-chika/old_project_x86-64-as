@@ -88,7 +88,11 @@ int belong_operand_class(operand_t operand, operand_class_t operand_class)
         case OPERAND_imm32:
         return operand.type == OPERAND_IMMEDIATE && -2147483648 <= operand.imm && operand.imm <=2147483647;
         break;
+        case OPERAND_imm64:
+        return operand.type == OPERAND_IMMEDIATE;
+        break;
         default:
+        printf("%d\n", operand_class.symbol);
         assert(0);
         break;
     }

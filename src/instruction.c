@@ -78,9 +78,19 @@ instruction_item_t instruction_items[] = {
         .operand_num=0,
         .operand_encoding=INSTRUCTION_OPERAND_ENCODING_ZO},
 
+
     //CLC
     {{1,0xf8},MNEMONIC_CLC, 
         0,{},
+        .operand_encoding=INSTRUCTION_OPERAND_ENCODING_ZO},
+
+    {{1,0xb8, .REX_W=1, .lsb3_opcode=1, .io=1}, .mnemonic=MNEMONIC_MOV,
+        .operand_num=2, .operand={{OPERAND_r64}, {OPERAND_imm64}},
+        .operand_encoding=INSTRUCTION_OPERAND_ENCODING_OI},
+
+    //SYSCALL
+    {{2,{0x0f,0x05},}, .mnemonic=MNEMONIC_SYSCALL,
+        .operand_num=0,
         .operand_encoding=INSTRUCTION_OPERAND_ENCODING_ZO},
 };
 

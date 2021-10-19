@@ -1,0 +1,9 @@
+#!/bin/bash -e
+source_file=$1
+only_name=${source_file:0:-2}
+binary=$only_name.bin
+output=$only_name
+
+simple_as $source_file
+bin2elf $binary $output
+chmod u+x $output

@@ -62,8 +62,18 @@ encoded_instruction_t encode_instruction(instruction_item_t instruction_item, le
                 encoded_instruction.immediate.imm = lexed_instruction.operand[i].imm;
         }
     };
-    if (instruction_opcode.io)assert(0);
-	if (instruction_opcode.lsb3_opcode) assert(0);
+    if (instruction_opcode.io){
+        encoded_instruction.exist_immediate = 1;
+        encoded_instruction.immediate.byte_num = 8;
+        for (int i = 0; i < lexed_instruction.operand_num; i++)
+        {
+            if (lexed_instruction.operand[i].type == OPERAND_IMMEDIATE)
+                encoded_instruction.immediate.imm = lexed_instruction.operand[i].imm;
+        }
+    };
+	if (instruction_opcode.lsb3_opcode)
+    {
+    };
 	if (instruction_opcode._i_float)assert(0);
 
     if (instruction_item.operand_encoding == INSTRUCTION_OPERAND_ENCODING_MI)
@@ -121,6 +131,18 @@ encoded_instruction_t encode_instruction(instruction_item_t instruction_item, le
         }
         assert(reg_encode < 8);
         encoded_instruction.mod_r_m.REG = reg_encode;
+    }
+    else if (instruction_item.operand_encoding == INSTRUCTION_OPERAND_ENCODING_OI)
+    {
+        assert(lexed_instruction.operand[0].type == OPERAND_REGISTER);
+        int reg_encode = encode_register_in_register_class(lexed_instruction.operand[0].reg);
+        if (reg_encode >= 8)
+        {
+            encoded_instruction.exist_rex_prefix = 1;
+            encoded_instruction.rex.B = 1;
+            reg_encode -= 8;
+        }
+        encoded_instruction.opcode[0] |= reg_encode;
     }
     else
     {
@@ -186,7 +208,7 @@ void print_encoded_instruction(encoded_instruction_t encoded_instruction)
     {
         for (int i = 0; i < encoded_instruction.opcode_num; i++)
         {
-            printf("%x ", encoded_instruction.opcode[i]);
+            printf("%02x ", encoded_instruction.opcode[i]);
         }
     };
 	if (encoded_instruction.exist_mod_r_m){
