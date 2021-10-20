@@ -27,6 +27,29 @@ int main(int argc, char** argv)
     while (0 < getline(&line, &line_size, in))
     {
         printf("%s", line);
+        if (line[0] == '.')
+        {
+            char* command = strtok(line, " \n");
+            if (0 == strcmp(command, ".byte"))
+            {
+                long byte_value = strtol(strtok(NULL," \n"), NULL, 10);
+                assert( (byte_value&0xff) == byte_value);
+                int count = fwrite(&byte_value, 1, 1, out);
+                assert(count == 1);
+            }
+            else if (0 == strcmp(command, ".ascii"))
+            {
+                char* ascii_str = strtok(NULL, " \n");
+                int len = strlen(ascii_str);
+                int count = fwrite(ascii_str, len, 1, out);
+                assert(count == 1);
+            }
+            else
+            {
+                assert(0);
+            }
+            continue;
+        }
         lexed_instruction_t lexed_instruction = lex_instruction(line);
         instruction_item_t instruction_item = get_instruction_item(lexed_instruction);
         encoded_instruction_t encoded_instruction = encode_instruction(instruction_item, lexed_instruction);

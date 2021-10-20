@@ -23,7 +23,11 @@ typedef struct
 }mod_r_m_t;
 
 typedef uint8_t sib_t;
-typedef int64_t displacement_t;
+typedef struct 
+{
+    int byte_num;
+    uint32_t disp;
+}displacement_t;
 typedef struct 
 {
 	int byte_num;

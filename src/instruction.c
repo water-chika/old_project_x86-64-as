@@ -83,7 +83,22 @@ instruction_item_t instruction_items[] = {
     {{1,0xf8},MNEMONIC_CLC, 
         0,{},
         .operand_encoding=INSTRUCTION_OPERAND_ENCODING_ZO},
-
+    //LEA
+    {{1,0x8d, ._r=1}, .mnemonic = MNEMONIC_LEA,
+        .operand_num=2, .operand={{OPERAND_r16}, {OPERAND_m}},
+        .operand_encoding = INSTRUCTION_OPERAND_ENCODING_RM,
+    },
+    {
+        {1,0x8d, ._r=1}, .mnemonic=MNEMONIC_LEA,
+        .operand_num=2, .operand={{OPERAND_r32}, {OPERAND_m}},
+        .operand_encoding=INSTRUCTION_OPERAND_ENCODING_RM,
+    },
+    {
+        {1,0x8d, .REX_W=1, ._r=1}, .mnemonic=MNEMONIC_LEA,
+        .operand_num=2, .operand={{OPERAND_r64}, {OPERAND_m}},
+        .operand_encoding=INSTRUCTION_OPERAND_ENCODING_RM,
+    },
+    //MOV
     {{1,0xb8, .REX_W=1, .lsb3_opcode=1, .io=1}, .mnemonic=MNEMONIC_MOV,
         .operand_num=2, .operand={{OPERAND_r64}, {OPERAND_imm64}},
         .operand_encoding=INSTRUCTION_OPERAND_ENCODING_OI},

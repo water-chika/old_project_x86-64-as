@@ -63,6 +63,21 @@ address_encoding_t encode_address(operand_t operand)
         address_encoding.r_m = r_m;
         address_encoding.exist_sib = 0; 
     }
+    else if (operand.type == OPERAND_MEMORY)
+    {
+        if (operand.mem.address_type == MEMORY_ADDRESS_INSTRUCTION_RELATIVE)
+        {
+            address_encoding.mod = 0;
+            address_encoding.r_m=0b101;
+            address_encoding.exist_disp = 1;
+            address_encoding.disp.byte_num = 4;
+            address_encoding.disp.disp = operand.mem.instruction_relative_address;
+        }
+        else
+        {
+            assert(0);
+        }
+    }
     else
     {
         assert(0);

@@ -15,6 +15,7 @@ mnemonic_map_string_t mnemonic_map_string[] = {
     {"CLC", MNEMONIC_CLC},
     {"RET", MNEMONIC_RET},
     {"MOV", MNEMONIC_MOV},
+    {"LEA", MNEMONIC_LEA},
     {"SYSCALL", MNEMONIC_SYSCALL},
 };
 

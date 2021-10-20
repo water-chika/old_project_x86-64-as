@@ -76,6 +76,7 @@ encoded_instruction_t encode_instruction(instruction_item_t instruction_item, le
     };
 	if (instruction_opcode._i_float)assert(0);
 
+
     if (instruction_item.operand_encoding == INSTRUCTION_OPERAND_ENCODING_MI)
     {
         assert(lexed_instruction.operand[0].type != OPERAND_IMMEDIATE);
@@ -86,14 +87,19 @@ encoded_instruction_t encode_instruction(instruction_item_t instruction_item, le
             encoded_instruction.exist_group3_prefix = 1;
             encoded_instruction.group3_prefix = GROUP3_PREFIX_OPERAND_SIZE_OVERRIDE;
         }
-        encoded_instruction.exist_rex_prefix |= address_encoding.exist_rex;
-        encoded_instruction.rex.B = address_encoding.rex_b;
-        encoded_instruction.rex.W = address_encoding.rex_w;
+        if (address_encoding.exist_rex)
+        {
+            encoded_instruction.exist_rex_prefix = address_encoding.exist_rex;
+            encoded_instruction.rex.B = address_encoding.rex_b;
+            encoded_instruction.rex.W = address_encoding.rex_w;
+        }
         encoded_instruction.exist_mod_r_m = 1;
         encoded_instruction.mod_r_m.Mod = address_encoding.mod;
         encoded_instruction.mod_r_m.RM = address_encoding.r_m;
         encoded_instruction.exist_sib |= address_encoding.exist_sib;
         encoded_instruction.sib = address_encoding.sib;
+        encoded_instruction.exist_displacement = address_encoding.exist_disp;
+        encoded_instruction.displacement = address_encoding.disp;
     }
     else if (instruction_item.operand_encoding == INSTRUCTION_OPERAND_ENCODING_ZO)
     {
@@ -113,16 +119,55 @@ encoded_instruction_t encode_instruction(instruction_item_t instruction_item, le
             encoded_instruction.exist_group3_prefix = 1;
             encoded_instruction.group3_prefix = GROUP3_PREFIX_OPERAND_SIZE_OVERRIDE;
         }
-        encoded_instruction.exist_rex_prefix |= address_encoding.exist_rex;
-        encoded_instruction.rex.B = address_encoding.rex_b;
-        encoded_instruction.rex.W = address_encoding.rex_w;
+        if (address_encoding.exist_rex)
+        {
+            encoded_instruction.exist_rex_prefix = address_encoding.exist_rex;
+            encoded_instruction.rex.B = address_encoding.rex_b;
+            encoded_instruction.rex.W = address_encoding.rex_w;
+        }
         encoded_instruction.exist_mod_r_m = 1;
         encoded_instruction.mod_r_m.Mod = address_encoding.mod;
         encoded_instruction.mod_r_m.RM = address_encoding.r_m;
         encoded_instruction.exist_sib |= address_encoding.exist_sib;
         encoded_instruction.sib = address_encoding.sib;
+        encoded_instruction.exist_displacement = address_encoding.exist_disp;
+        encoded_instruction.displacement = address_encoding.disp;
 
         int reg_encode = encode_register_in_register_class(lexed_instruction.operand[1].reg);
+        if (reg_encode >= 8)
+        {
+            encoded_instruction.exist_rex_prefix = 1;
+            encoded_instruction.rex.R = 1;
+            reg_encode -= 8;
+        }
+        assert(reg_encode < 8);
+        encoded_instruction.mod_r_m.REG = reg_encode;
+    }
+    else if (instruction_item.operand_encoding == INSTRUCTION_OPERAND_ENCODING_RM)
+    {
+        assert(lexed_instruction.operand[1].type != OPERAND_IMMEDIATE);
+        assert(lexed_instruction.operand[0].type == OPERAND_REGISTER);
+        address_encoding_t address_encoding = encode_address(lexed_instruction.operand[1]);
+        if (address_encoding.exist_operand_size_prefix)
+        {
+            encoded_instruction.exist_group3_prefix = 1;
+            encoded_instruction.group3_prefix = GROUP3_PREFIX_OPERAND_SIZE_OVERRIDE;
+        }
+        if (address_encoding.exist_rex)
+        {
+            encoded_instruction.exist_rex_prefix = address_encoding.exist_rex;
+            encoded_instruction.rex.B = address_encoding.rex_b;
+            encoded_instruction.rex.W = address_encoding.rex_w;
+        }
+        encoded_instruction.exist_mod_r_m = 1;
+        encoded_instruction.mod_r_m.Mod = address_encoding.mod;
+        encoded_instruction.mod_r_m.RM = address_encoding.r_m;
+        encoded_instruction.exist_sib |= address_encoding.exist_sib;
+        encoded_instruction.sib = address_encoding.sib;
+        encoded_instruction.exist_displacement = address_encoding.exist_disp;
+        encoded_instruction.displacement = address_encoding.disp;
+
+        int reg_encode = encode_register_in_register_class(lexed_instruction.operand[0].reg);
         if (reg_encode >= 8)
         {
             encoded_instruction.exist_rex_prefix = 1;
@@ -178,7 +223,15 @@ binary_instruction_t generate_binary_instruction(encoded_instruction_t encoded_i
         code.bytes[code.size++] = (mod_r_m.Mod << 6) | (mod_r_m.REG << 3) | (mod_r_m.RM);
     };
 	if (encoded_instruction.exist_sib)assert(0);
-	if (encoded_instruction.exist_displacement)assert(0);
+	if (encoded_instruction.exist_displacement)
+    {
+        uint32_t disp = encoded_instruction.displacement.disp;
+        for (int i = 0; i < encoded_instruction.displacement.byte_num; i++)
+        {
+            code.bytes[code.size++] = disp & 0xff;
+            disp >>= 8;
+        }
+    }
 	if (encoded_instruction.exist_immediate)
     {
         immediate_t imm = encoded_instruction.immediate.imm;
@@ -216,7 +269,13 @@ void print_encoded_instruction(encoded_instruction_t encoded_instruction)
         printf("%02x ", (mod_r_m.Mod << 6) | (mod_r_m.REG << 3) | (mod_r_m.RM));
     };
 	if (encoded_instruction.exist_sib)assert(0);
-	if (encoded_instruction.exist_displacement)assert(0);
+	if (encoded_instruction.exist_displacement)
+    {
+        for (int i = 0; i < encoded_instruction.displacement.byte_num; i++)
+        {
+            printf("%02x ", (encoded_instruction.displacement.disp>>(8*i) )& 0xff);
+        }
+    }
 	if (encoded_instruction.exist_immediate)
     {
         for (int i = 0; i < encoded_instruction.immediate.byte_num; i++)

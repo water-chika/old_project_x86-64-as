@@ -16,7 +16,17 @@ operand_t lex_operand(const char* operand_string)
     }
     else if (operand_string[0] == '[')
     {
-
+        if (operand_string[1]=='.')
+        {
+            operand.type = OPERAND_MEMORY;
+            operand.mem.address_type = MEMORY_ADDRESS_INSTRUCTION_RELATIVE;
+            char* tail = NULL;
+            operand.mem.instruction_relative_address = strtoll(operand_string+2, &tail, 10);
+        }
+        else
+        {
+            assert(0);
+        }
     }
     else if (operand_string[0] == '$')
     {
@@ -68,6 +78,10 @@ int belong_operand_class(operand_t operand, operand_class_t operand_class)
         case OPERAND_CONSTANT_REGISTER:
         return operand.type == OPERAND_REGISTER && operand_class.reg == operand.reg;
 
+        case OPERAND_m:
+        return operand.type == OPERAND_MEMORY;
+        break;
+
         case OPERAND_r_m8_compat:
         return belong_r8_compat(operand) || operand.type == OPERAND_MEMORY;
         case OPERAND_r_m8:
@@ -116,6 +130,15 @@ int print_operand_class(operand_class_t operand_class)
             print_register(operand_class.reg);
             return 0;
         break;
+        case OPERAND_r32:
+        symbol_string = "r32";
+        break;
+        case OPERAND_r64:
+        symbol_string = "r64";
+        break;
+        case OPERAND_m:
+        symbol_string = "m";
+        break;
         case OPERAND_imm8:
         symbol_string = "imm8";
         break;
@@ -139,6 +162,6 @@ int print_operand_class(operand_class_t operand_class)
         assert(0);
         break;
     }
-    printf("%s ", symbol_string);
+    printf("%s", symbol_string);
     return 0;
 }

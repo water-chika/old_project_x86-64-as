@@ -3,6 +3,7 @@
 
 #include "immediate.h"
 #include "register.h"
+#include "memory.h"
 #include <stdint.h>
 
 
@@ -18,6 +19,7 @@ typedef struct
     union{
         immediate_t imm;
         x86_64_register_t reg;
+        memory_t mem;
     };
 }operand_t;
 
@@ -39,6 +41,8 @@ OPERAND_r8,
 OPERAND_r16,
 OPERAND_r32,
 OPERAND_r64,
+
+OPERAND_m,
 
 OPERAND_r_m8_compat,
 OPERAND_r_m8,

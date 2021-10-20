@@ -6,6 +6,7 @@ typedef enum
     MNEMONIC_ADC,
     MNEMONIC_CLC,
     MNEMONIC_RET,
+    MNEMONIC_LEA,
     MNEMONIC_MOV,
     MNEMONIC_SYSCALL,
 }mnemonic_t;
