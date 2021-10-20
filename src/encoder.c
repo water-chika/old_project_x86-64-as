@@ -116,7 +116,7 @@ encoded_instruction_t encode_instruction(instruction_item_t instruction_item, le
     else if (instruction_item.operand_encoding == INSTRUCTION_OPERAND_ENCODING_OI)
     {
         assert(lexed_instruction.operand[0].type == OPERAND_REGISTER);
-        int reg_encode = encode_register_in_register_class(lexed_instruction.operand[0].reg);
+        int reg_encode = encode_general_purpose_register(lexed_instruction.operand[0].reg);
         if (reg_encode >= 8)
         {
             encoded_instruction.exist_rex_prefix = 1;
@@ -135,7 +135,7 @@ encoded_instruction_t encode_instruction(instruction_item_t instruction_item, le
     {
         encoded_instruction.exist_mod_r_m = 1;
         assert(mod_r_m_r_operand.type == OPERAND_REGISTER);
-        int reg_encode = encode_register_in_register_class(mod_r_m_r_operand.reg);
+        int reg_encode = encode_general_purpose_register(mod_r_m_r_operand.reg);
         if (reg_encode >= 8)
         {
             encoded_instruction.exist_rex_prefix = 1;

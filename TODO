@@ -1,5 +1,6 @@
 current work:
-	Write another project resolve ELF file format.
+	add all ADD instruction
+	add all MNEMONIC
 
 Had begin and need complete:
 	operand lexer
@@ -7,3 +8,4 @@ Had begin and need complete:
 	instruction lexer
 	intruction item searcher
 	encoder
+	Write another project resolve ELF file format.

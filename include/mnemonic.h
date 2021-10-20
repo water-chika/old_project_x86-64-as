@@ -4,6 +4,7 @@
 typedef enum
 {
     MNEMONIC_ADC,
+    MNEMONIC_ADD,
     MNEMONIC_CLC,
     MNEMONIC_RET,
     MNEMONIC_LEA,

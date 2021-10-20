@@ -140,10 +140,16 @@ int belong_to_register_class(x86_64_register_t reg, x86_64_register_class_t reg_
     }
 }
 
-int encode_register_in_register_class(x86_64_register_t reg)
+int is_general_purpose_register(x86_64_register_t reg)
+{
+    assert(0);
+}
+
+//encode General Purpose Register
+int encode_general_purpose_register(x86_64_register_t gpr)
 {
 
-    switch (reg)
+    switch (gpr)
     {
         case REGISTER_AL:case REGISTER_AX:case REGISTER_EAX:case REGISTER_RAX:
             return 0;
@@ -194,7 +200,7 @@ int encode_register_in_register_class(x86_64_register_t reg)
             return 15;
             break;
     }
-    fprintf(stderr, "Unknown reg : %d\n", reg);
+    fprintf(stderr, "Unknown reg : %d\n", gpr);
     assert(0);
     return -1;
 }

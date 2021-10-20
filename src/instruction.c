@@ -72,7 +72,26 @@ instruction_item_t instruction_items[] = {
         .operand_encoding=INSTRUCTION_OPERAND_ENCODING_RM},
 
     //ADD
-    
+    {
+        {1,0x04, .ib=1}, .mnemonic=MNEMONIC_ADD,
+        .operand_num=2, .operand={{OPERAND_CONSTANT_REGISTER, REGISTER_AL},{OPERAND_imm8}},
+        .operand_encoding=INSTRUCTION_OPERAND_ENCODING_I,
+    },
+    {
+        {1,0x05, .iw=1}, .mnemonic=MNEMONIC_ADD,
+        .operand_num=2, .operand={{OPERAND_CONSTANT_REGISTER, REGISTER_AX},{OPERAND_imm16}},
+        .operand_encoding=INSTRUCTION_OPERAND_ENCODING_I,
+    },
+    {
+        {1,0x05, .id=1}, .mnemonic=MNEMONIC_ADD,
+        .operand_num=2, .operand={{OPERAND_CONSTANT_REGISTER, REGISTER_EAX}, {OPERAND_imm32}},
+        .operand_encoding=INSTRUCTION_OPERAND_ENCODING_I,
+    },
+    {
+        {1,0x05, .REX_W=1, .id=1}, .mnemonic=MNEMONIC_ADD,
+        .operand_num=2, .operand={{OPERAND_CONSTANT_REGISTER,REGISTER_RAX}, {OPERAND_imm32}},
+        .operand_encoding=INSTRUCTION_OPERAND_ENCODING_I,
+    },
     //RET
     {{1,0xc3}, .mnemonic=MNEMONIC_RET,
         .operand_num=0,

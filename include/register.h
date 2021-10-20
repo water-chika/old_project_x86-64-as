@@ -57,5 +57,7 @@ typedef enum
     REGISTER_CLASS_R8_COMPAT,
 }x86_64_register_class_t;
 int belong_to_register_class(x86_64_register_t reg, x86_64_register_class_t reg_class);
-int encode_register_in_register_class(x86_64_register_t);
+
+int is_general_purpose_register(x86_64_register_t reg);
+int encode_general_purpose_register(x86_64_register_t gpr);
 #endif
