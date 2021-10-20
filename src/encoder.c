@@ -76,30 +76,16 @@ encoded_instruction_t encode_instruction(instruction_item_t instruction_item, le
     };
 	if (instruction_opcode._i_float)assert(0);
 
-
+    int exist_mod_r_m_m_operand = 0;
+    operand_t mod_r_m_m_operand = {};
+    int exist_mod_r_m_r_operand = 0;
+    operand_t mod_r_m_r_operand = {};
     if (instruction_item.operand_encoding == INSTRUCTION_OPERAND_ENCODING_MI)
     {
+        exist_mod_r_m_m_operand = 1;
+        mod_r_m_m_operand = lexed_instruction.operand[0];
         assert(lexed_instruction.operand[0].type != OPERAND_IMMEDIATE);
         assert(lexed_instruction.operand[1].type == OPERAND_IMMEDIATE);
-        address_encoding_t address_encoding = encode_address(lexed_instruction.operand[0]);
-        if (address_encoding.exist_operand_size_prefix)
-        {
-            encoded_instruction.exist_group3_prefix = 1;
-            encoded_instruction.group3_prefix = GROUP3_PREFIX_OPERAND_SIZE_OVERRIDE;
-        }
-        if (address_encoding.exist_rex)
-        {
-            encoded_instruction.exist_rex_prefix = address_encoding.exist_rex;
-            encoded_instruction.rex.B = address_encoding.rex_b;
-            encoded_instruction.rex.W = address_encoding.rex_w;
-        }
-        encoded_instruction.exist_mod_r_m = 1;
-        encoded_instruction.mod_r_m.Mod = address_encoding.mod;
-        encoded_instruction.mod_r_m.RM = address_encoding.r_m;
-        encoded_instruction.exist_sib |= address_encoding.exist_sib;
-        encoded_instruction.sib = address_encoding.sib;
-        encoded_instruction.exist_displacement = address_encoding.exist_disp;
-        encoded_instruction.displacement = address_encoding.disp;
     }
     else if (instruction_item.operand_encoding == INSTRUCTION_OPERAND_ENCODING_ZO)
     {
@@ -111,71 +97,21 @@ encoded_instruction_t encode_instruction(instruction_item_t instruction_item, le
     }
     else if (instruction_item.operand_encoding == INSTRUCTION_OPERAND_ENCODING_MR)
     {
+        exist_mod_r_m_m_operand = 1;
+        mod_r_m_m_operand = lexed_instruction.operand[0];
+        exist_mod_r_m_r_operand = 1;
+        mod_r_m_r_operand = lexed_instruction.operand[1];
         assert(lexed_instruction.operand[0].type != OPERAND_IMMEDIATE);
         assert(lexed_instruction.operand[1].type == OPERAND_REGISTER);
-        address_encoding_t address_encoding = encode_address(lexed_instruction.operand[0]);
-        if (address_encoding.exist_operand_size_prefix)
-        {
-            encoded_instruction.exist_group3_prefix = 1;
-            encoded_instruction.group3_prefix = GROUP3_PREFIX_OPERAND_SIZE_OVERRIDE;
-        }
-        if (address_encoding.exist_rex)
-        {
-            encoded_instruction.exist_rex_prefix = address_encoding.exist_rex;
-            encoded_instruction.rex.B = address_encoding.rex_b;
-            encoded_instruction.rex.W = address_encoding.rex_w;
-        }
-        encoded_instruction.exist_mod_r_m = 1;
-        encoded_instruction.mod_r_m.Mod = address_encoding.mod;
-        encoded_instruction.mod_r_m.RM = address_encoding.r_m;
-        encoded_instruction.exist_sib |= address_encoding.exist_sib;
-        encoded_instruction.sib = address_encoding.sib;
-        encoded_instruction.exist_displacement = address_encoding.exist_disp;
-        encoded_instruction.displacement = address_encoding.disp;
-
-        int reg_encode = encode_register_in_register_class(lexed_instruction.operand[1].reg);
-        if (reg_encode >= 8)
-        {
-            encoded_instruction.exist_rex_prefix = 1;
-            encoded_instruction.rex.R = 1;
-            reg_encode -= 8;
-        }
-        assert(reg_encode < 8);
-        encoded_instruction.mod_r_m.REG = reg_encode;
     }
     else if (instruction_item.operand_encoding == INSTRUCTION_OPERAND_ENCODING_RM)
     {
+        exist_mod_r_m_m_operand = 1;
+        mod_r_m_m_operand = lexed_instruction.operand[1];
+        exist_mod_r_m_r_operand = 1;
+        mod_r_m_r_operand = lexed_instruction.operand[0];
         assert(lexed_instruction.operand[1].type != OPERAND_IMMEDIATE);
         assert(lexed_instruction.operand[0].type == OPERAND_REGISTER);
-        address_encoding_t address_encoding = encode_address(lexed_instruction.operand[1]);
-        if (address_encoding.exist_operand_size_prefix)
-        {
-            encoded_instruction.exist_group3_prefix = 1;
-            encoded_instruction.group3_prefix = GROUP3_PREFIX_OPERAND_SIZE_OVERRIDE;
-        }
-        if (address_encoding.exist_rex)
-        {
-            encoded_instruction.exist_rex_prefix = address_encoding.exist_rex;
-            encoded_instruction.rex.B = address_encoding.rex_b;
-            encoded_instruction.rex.W = address_encoding.rex_w;
-        }
-        encoded_instruction.exist_mod_r_m = 1;
-        encoded_instruction.mod_r_m.Mod = address_encoding.mod;
-        encoded_instruction.mod_r_m.RM = address_encoding.r_m;
-        encoded_instruction.exist_sib |= address_encoding.exist_sib;
-        encoded_instruction.sib = address_encoding.sib;
-        encoded_instruction.exist_displacement = address_encoding.exist_disp;
-        encoded_instruction.displacement = address_encoding.disp;
-
-        int reg_encode = encode_register_in_register_class(lexed_instruction.operand[0].reg);
-        if (reg_encode >= 8)
-        {
-            encoded_instruction.exist_rex_prefix = 1;
-            encoded_instruction.rex.R = 1;
-            reg_encode -= 8;
-        }
-        assert(reg_encode < 8);
-        encoded_instruction.mod_r_m.REG = reg_encode;
     }
     else if (instruction_item.operand_encoding == INSTRUCTION_OPERAND_ENCODING_OI)
     {
@@ -184,9 +120,10 @@ encoded_instruction_t encode_instruction(instruction_item_t instruction_item, le
         if (reg_encode >= 8)
         {
             encoded_instruction.exist_rex_prefix = 1;
-            encoded_instruction.rex.B = 1;
+            encoded_instruction.rex.R = 1;
             reg_encode -= 8;
         }
+        assert(reg_encode < 8);
         encoded_instruction.opcode[0] |= reg_encode;
     }
     else
@@ -194,6 +131,43 @@ encoded_instruction_t encode_instruction(instruction_item_t instruction_item, le
         assert(0);
     }
 
+    if (exist_mod_r_m_r_operand)
+    {
+        encoded_instruction.exist_mod_r_m = 1;
+        assert(mod_r_m_r_operand.type == OPERAND_REGISTER);
+        int reg_encode = encode_register_in_register_class(mod_r_m_r_operand.reg);
+        if (reg_encode >= 8)
+        {
+            encoded_instruction.exist_rex_prefix = 1;
+            encoded_instruction.rex.R = 1;
+            reg_encode -= 8;
+        }
+        assert(reg_encode < 8);
+        encoded_instruction.mod_r_m.REG = reg_encode;
+    }
+
+    if (exist_mod_r_m_m_operand)
+    {
+        encoded_instruction.exist_mod_r_m = 1;
+        address_encoding_t address_encoding = encode_address(mod_r_m_m_operand);
+        if (address_encoding.exist_operand_size_prefix)
+        {
+            encoded_instruction.exist_group3_prefix = 1;
+            encoded_instruction.group3_prefix = GROUP3_PREFIX_OPERAND_SIZE_OVERRIDE;
+        }
+        if (address_encoding.exist_rex)
+        {
+            encoded_instruction.exist_rex_prefix = address_encoding.exist_rex;
+            encoded_instruction.rex.B = address_encoding.rex_b;
+            encoded_instruction.rex.W = address_encoding.rex_w;
+        }
+        encoded_instruction.mod_r_m.Mod = address_encoding.mod;
+        encoded_instruction.mod_r_m.RM = address_encoding.r_m;
+        encoded_instruction.exist_sib |= address_encoding.exist_sib;
+        encoded_instruction.sib = address_encoding.sib;
+        encoded_instruction.exist_displacement = address_encoding.exist_disp;
+        encoded_instruction.displacement = address_encoding.disp;
+    }
     return encoded_instruction;
 }
 

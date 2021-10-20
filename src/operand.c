@@ -148,6 +148,9 @@ int print_operand_class(operand_class_t operand_class)
         case OPERAND_imm32:
         symbol_string = "imm32";
         break;
+        case OPERAND_imm64:
+        symbol_string = "imm64";
+        break;
         case OPERAND_r_m8_compat:
         symbol_string = "r/m8_compat";
         break;

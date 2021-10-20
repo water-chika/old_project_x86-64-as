@@ -169,7 +169,32 @@ int encode_register_in_register_class(x86_64_register_t reg)
         case REGISTER_BH:case REGISTER_DIL:case REGISTER_DI:case REGISTER_EDI:case REGISTER_RDI:
             return 7;
             break;
+        case REGISTER_R8B:case REGISTER_R8W:case REGISTER_R8D:case REGISTER_R8:
+            return 8;
+            break;
+        case REGISTER_R9B:case REGISTER_R9W:case REGISTER_R9D:case REGISTER_R9:
+            return 9;
+            break;
+        case REGISTER_R10B:case REGISTER_R10W:case REGISTER_R10D:case REGISTER_R10:
+            return 10;
+            break;
+        case REGISTER_R11B:case REGISTER_R11W:case REGISTER_R11D:case REGISTER_R11:
+            return 11;
+            break;
+        case REGISTER_R12B:case REGISTER_R12W:case REGISTER_R12D:case REGISTER_R12:
+            return 12;
+            break;
+        case REGISTER_R13B:case REGISTER_R13W:case REGISTER_R13D:case REGISTER_R13:
+            return 13;
+            break;
+        case REGISTER_R14B:case REGISTER_R14W:case REGISTER_R14D:case REGISTER_R14:
+            return 14;
+            break;
+        case REGISTER_R15B:case REGISTER_R15W:case REGISTER_R15D:case REGISTER_R15:
+            return 15;
+            break;
     }
+    fprintf(stderr, "Unknown reg : %d\n", reg);
     assert(0);
     return -1;
 }
