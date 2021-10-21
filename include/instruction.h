@@ -18,7 +18,7 @@ typedef struct
 	uint8_t e_code_offset : 1;
 	uint8_t e_immediate : 1;
 	uint8_t ib : 1;uint8_t iw : 1;uint8_t id : 1;uint8_t io : 1;
-	uint8_t lsb3_opcode : 1;
+	uint8_t reg_opcode : 1;
 	uint8_t _i_float : 1;
 
 	uint8_t digit : 3;
@@ -33,6 +33,7 @@ typedef enum
 	INSTRUCTION_OPERAND_ENCODING_RM,
 	INSTRUCTION_OPERAND_ENCODING_MR,
 	INSTRUCTION_OPERAND_ENCODING_MI,
+	INSTRUCTION_OPERAND_ENCODING_O,
 	INSTRUCTION_OPERAND_ENCODING_OI,
 	INSTRUCTION_OPERAND_ENCODING_I,
 }instruction_operand_encoding_t;
@@ -51,3 +52,18 @@ typedef struct
 instruction_item_t get_instruction_item(lexed_instruction_t lexed_instruction);
 
 int print_instruction_item(instruction_item_t instruction_item);
+
+typedef struct
+{
+	mnemonic_t mnemonic;
+	int operand_num;
+	exact_operand_t operand[4];
+}exact_instruction_t;
+
+typedef struct 
+{
+	int offset;
+	exact_instruction_t exact_instruction;
+}instruction_item_iterator_t;
+
+const instruction_item_t* next_instruction_item(instruction_item_iterator_t* iterator);

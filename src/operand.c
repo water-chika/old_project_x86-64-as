@@ -11,14 +11,14 @@ operand_t lex_operand(const char* operand_string)
     operand_t operand;
     if (operand_string[0] == '%')
     {
-        operand.type = OPERAND_REGISTER;
+        operand.type = OPERAND_TYPE_REGISTER;
         operand.reg = lex_register(operand_string+1);
     }
     else if (operand_string[0] == '[')
     {
         if (operand_string[1]=='.')
         {
-            operand.type = OPERAND_MEMORY;
+            operand.type = OPERAND_TYPE_MEMORY;
             operand.mem.address_type = MEMORY_ADDRESS_INSTRUCTION_RELATIVE;
             char* tail = NULL;
             operand.mem.instruction_relative_address = strtoll(operand_string+2, &tail, 10);
@@ -30,7 +30,7 @@ operand_t lex_operand(const char* operand_string)
     }
     else if (operand_string[0] == '$')
     {
-        operand.type = OPERAND_IMMEDIATE;
+        operand.type = OPERAND_TYPE_IMMEDIATE;
         operand.imm = lex_immediate(operand_string+1);
     }
     else
@@ -42,19 +42,19 @@ operand_t lex_operand(const char* operand_string)
 }
 int belong_r8_compat(operand_t operand)
 {
-    return operand.type == OPERAND_REGISTER && belong_to_register_class(operand.reg, REGISTER_CLASS_R8_COMPAT);
+    return operand.type == OPERAND_TYPE_REGISTER && belong_to_register_class(operand.reg, REGISTER_CLASS_R8_COMPAT);
 }
 int belong_r8(operand_t operand)
 {
-        return operand.type == OPERAND_REGISTER && belong_to_register_class(operand.reg, REGISTER_CLASS_R8);
+        return operand.type == OPERAND_TYPE_REGISTER && belong_to_register_class(operand.reg, REGISTER_CLASS_R8);
 }
 int belong_r16(operand_t operand)
 {
-    return operand.type == OPERAND_REGISTER && belong_to_register_class(operand.reg, REGISTER_CLASS_R16);
+    return operand.type == OPERAND_TYPE_REGISTER && belong_to_register_class(operand.reg, REGISTER_CLASS_R16);
 }
 int belong_r32(operand_t operand)
 {
-        return operand.type == OPERAND_REGISTER && belong_to_register_class(operand.reg, REGISTER_CLASS_R32);
+        return operand.type == OPERAND_TYPE_REGISTER && belong_to_register_class(operand.reg, REGISTER_CLASS_R32);
 }
 
 int belong_operand_class(operand_t operand, operand_class_t operand_class)
@@ -73,37 +73,37 @@ int belong_operand_class(operand_t operand, operand_class_t operand_class)
         case OPERAND_r32:
         return belong_r32(operand);
         case OPERAND_r64:
-        return operand.type == OPERAND_REGISTER && belong_to_register_class(operand.reg, REGISTER_CLASS_R64);
+        return operand.type == OPERAND_TYPE_REGISTER && belong_to_register_class(operand.reg, REGISTER_CLASS_R64);
 
         case OPERAND_CONSTANT_REGISTER:
-        return operand.type == OPERAND_REGISTER && operand_class.reg == operand.reg;
+        return operand.type == OPERAND_TYPE_REGISTER && operand_class.reg == operand.reg;
 
         case OPERAND_m:
-        return operand.type == OPERAND_MEMORY;
+        return operand.type == OPERAND_TYPE_MEMORY;
         break;
 
         case OPERAND_r_m8_compat:
-        return belong_r8_compat(operand) || operand.type == OPERAND_MEMORY;
+        return belong_r8_compat(operand) || operand.type == OPERAND_TYPE_MEMORY;
         case OPERAND_r_m8:
-        return belong_r8(operand) || operand.type == OPERAND_MEMORY;
+        return belong_r8(operand) || operand.type == OPERAND_TYPE_MEMORY;
         case OPERAND_r_m16:
-        return belong_r16(operand) || operand.type == OPERAND_MEMORY;
+        return belong_r16(operand) || operand.type == OPERAND_TYPE_MEMORY;
         case OPERAND_r_m32:
-        return belong_r32(operand) || operand.type == OPERAND_MEMORY;
+        return belong_r32(operand) || operand.type == OPERAND_TYPE_MEMORY;
         case OPERAND_r_m64:
-        return operand.type == OPERAND_MEMORY || operand.type == OPERAND_REGISTER && belong_to_register_class(operand.reg, REGISTER_CLASS_R64);
+        return operand.type == OPERAND_TYPE_MEMORY || operand.type == OPERAND_TYPE_REGISTER && belong_to_register_class(operand.reg, REGISTER_CLASS_R64);
 
         case OPERAND_imm8:
-        return operand.type == OPERAND_IMMEDIATE && -128 <= operand.imm && operand.imm <= 127;
+        return operand.type == OPERAND_TYPE_IMMEDIATE && -128 <= operand.imm && operand.imm <= 127;
         break;
         case OPERAND_imm16:
-        return operand.type == OPERAND_IMMEDIATE && -32768 <= operand.imm && operand.imm <= 32767;
+        return operand.type == OPERAND_TYPE_IMMEDIATE && -32768 <= operand.imm && operand.imm <= 32767;
         break;
         case OPERAND_imm32:
-        return operand.type == OPERAND_IMMEDIATE && -2147483648 <= operand.imm && operand.imm <=2147483647;
+        return operand.type == OPERAND_TYPE_IMMEDIATE && -2147483648 <= operand.imm && operand.imm <=2147483647;
         break;
         case OPERAND_imm64:
-        return operand.type == OPERAND_IMMEDIATE;
+        return operand.type == OPERAND_TYPE_IMMEDIATE;
         break;
         default:
         printf("%d\n", operand_class.symbol);

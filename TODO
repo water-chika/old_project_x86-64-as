@@ -1,6 +1,5 @@
 current work:
-	add all ADD instruction
-	add all MNEMONIC
+	new frontend to parse instruction string.
 
 Had begin and need complete:
 	operand lexer

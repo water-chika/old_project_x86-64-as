@@ -40,7 +40,7 @@ encoded_instruction_t encode_instruction(instruction_item_t instruction_item, le
         encoded_instruction.immediate.byte_num = 1;
         for (int i = 0; i < lexed_instruction.operand_num; i++)
         {
-            if (lexed_instruction.operand[i].type == OPERAND_IMMEDIATE)
+            if (lexed_instruction.operand[i].type == OPERAND_TYPE_IMMEDIATE)
                 encoded_instruction.immediate.imm = lexed_instruction.operand[i].imm;
         }
     };
@@ -49,7 +49,7 @@ encoded_instruction_t encode_instruction(instruction_item_t instruction_item, le
         encoded_instruction.immediate.byte_num = 2;
         for (int i = 0; i < lexed_instruction.operand_num; i++)
         {
-            if (lexed_instruction.operand[i].type == OPERAND_IMMEDIATE)
+            if (lexed_instruction.operand[i].type == OPERAND_TYPE_IMMEDIATE)
                 encoded_instruction.immediate.imm = lexed_instruction.operand[i].imm;
         }
     };
@@ -58,7 +58,7 @@ encoded_instruction_t encode_instruction(instruction_item_t instruction_item, le
         encoded_instruction.immediate.byte_num = 4;
         for (int i = 0; i < lexed_instruction.operand_num; i++)
         {
-            if (lexed_instruction.operand[i].type == OPERAND_IMMEDIATE)
+            if (lexed_instruction.operand[i].type == OPERAND_TYPE_IMMEDIATE)
                 encoded_instruction.immediate.imm = lexed_instruction.operand[i].imm;
         }
     };
@@ -67,12 +67,12 @@ encoded_instruction_t encode_instruction(instruction_item_t instruction_item, le
         encoded_instruction.immediate.byte_num = 8;
         for (int i = 0; i < lexed_instruction.operand_num; i++)
         {
-            if (lexed_instruction.operand[i].type == OPERAND_IMMEDIATE)
+            if (lexed_instruction.operand[i].type == OPERAND_TYPE_IMMEDIATE)
                 encoded_instruction.immediate.imm = lexed_instruction.operand[i].imm;
         }
     };
-	if (instruction_opcode.lsb3_opcode)
-    {
+	if (instruction_opcode.reg_opcode)
+    {assert(0);
     };
 	if (instruction_opcode._i_float)assert(0);
 
@@ -84,8 +84,8 @@ encoded_instruction_t encode_instruction(instruction_item_t instruction_item, le
     {
         exist_mod_r_m_m_operand = 1;
         mod_r_m_m_operand = lexed_instruction.operand[0];
-        assert(lexed_instruction.operand[0].type != OPERAND_IMMEDIATE);
-        assert(lexed_instruction.operand[1].type == OPERAND_IMMEDIATE);
+        assert(lexed_instruction.operand[0].type != OPERAND_TYPE_IMMEDIATE);
+        assert(lexed_instruction.operand[1].type == OPERAND_TYPE_IMMEDIATE);
     }
     else if (instruction_item.operand_encoding == INSTRUCTION_OPERAND_ENCODING_ZO)
     {
@@ -93,7 +93,26 @@ encoded_instruction_t encode_instruction(instruction_item_t instruction_item, le
     }
     else if (instruction_item.operand_encoding == INSTRUCTION_OPERAND_ENCODING_I)
     {
+        assert(lexed_instruction.operand[0].type == OPERAND_TYPE_REGISTER);
+        if (belong_to_register_class(lexed_instruction.operand[0].reg, REGISTER_CLASS_R16))
+        {
+            encoded_instruction.exist_group3_prefix=1;
+            encoded_instruction.group3_prefix=GROUP3_PREFIX_OPERAND_SIZE_OVERRIDE;
+        }
+        else if (belong_to_register_class(lexed_instruction.operand[0].reg, REGISTER_CLASS_R8))
+        {
+        }
+        else if (belong_to_register_class(lexed_instruction.operand[0].reg, REGISTER_CLASS_R64))
+        {
 
+        }
+        else if (belong_to_register_class(lexed_instruction.operand[0].reg, REGISTER_CLASS_R32))
+        {
+        }
+        else
+        {
+            assert(0);
+        }
     }
     else if (instruction_item.operand_encoding == INSTRUCTION_OPERAND_ENCODING_MR)
     {
@@ -101,8 +120,8 @@ encoded_instruction_t encode_instruction(instruction_item_t instruction_item, le
         mod_r_m_m_operand = lexed_instruction.operand[0];
         exist_mod_r_m_r_operand = 1;
         mod_r_m_r_operand = lexed_instruction.operand[1];
-        assert(lexed_instruction.operand[0].type != OPERAND_IMMEDIATE);
-        assert(lexed_instruction.operand[1].type == OPERAND_REGISTER);
+        assert(lexed_instruction.operand[0].type != OPERAND_TYPE_IMMEDIATE);
+        assert(lexed_instruction.operand[1].type == OPERAND_TYPE_REGISTER);
     }
     else if (instruction_item.operand_encoding == INSTRUCTION_OPERAND_ENCODING_RM)
     {
@@ -110,12 +129,12 @@ encoded_instruction_t encode_instruction(instruction_item_t instruction_item, le
         mod_r_m_m_operand = lexed_instruction.operand[1];
         exist_mod_r_m_r_operand = 1;
         mod_r_m_r_operand = lexed_instruction.operand[0];
-        assert(lexed_instruction.operand[1].type != OPERAND_IMMEDIATE);
-        assert(lexed_instruction.operand[0].type == OPERAND_REGISTER);
+        assert(lexed_instruction.operand[1].type != OPERAND_TYPE_IMMEDIATE);
+        assert(lexed_instruction.operand[0].type == OPERAND_TYPE_REGISTER);
     }
     else if (instruction_item.operand_encoding == INSTRUCTION_OPERAND_ENCODING_OI)
     {
-        assert(lexed_instruction.operand[0].type == OPERAND_REGISTER);
+        assert(lexed_instruction.operand[0].type == OPERAND_TYPE_REGISTER);
         int reg_encode = encode_general_purpose_register(lexed_instruction.operand[0].reg);
         if (reg_encode >= 8)
         {
@@ -134,7 +153,7 @@ encoded_instruction_t encode_instruction(instruction_item_t instruction_item, le
     if (exist_mod_r_m_r_operand)
     {
         encoded_instruction.exist_mod_r_m = 1;
-        assert(mod_r_m_r_operand.type == OPERAND_REGISTER);
+        assert(mod_r_m_r_operand.type == OPERAND_TYPE_REGISTER);
         int reg_encode = encode_general_purpose_register(mod_r_m_r_operand.reg);
         if (reg_encode >= 8)
         {
@@ -257,4 +276,11 @@ void print_encoded_instruction(encoded_instruction_t encoded_instruction)
             printf("%02x ", *(i+(uint8_t*)(&encoded_instruction.immediate.imm)));
         }
     };
+}
+
+encoded_instruction_t encode_exact_instruction(exact_instruction_t exact_instruction)
+{
+    instruction_item_iterator_t instruction_item_iterator = {.exact_instruction=exact_instruction};
+    const instruction_item_t* instruction_item = next_instruction_item(&instruction_item_iterator);
+    assert(0);
 }

@@ -1,0 +1,10 @@
+#ifndef OPERAND_SIZE_H
+#define OPERAND_SIZE_H
+typedef enum
+{
+    OPERAND_SIZE_BYTE,
+    OPERAND_SIZE_WORD,
+    OPERAND_SIZE_DOUBLEWORD,
+    OPERAND_SIZE_QUADWORD,
+}operand_size_t;
+#endif

@@ -15,7 +15,7 @@ lexed_instruction_t lex_instruction(const char* instruction)
     lexed_instruction.operand_num = 4;
     for (int i = 0; i < 4; i ++)
     {
-        operand_string[i] = strtok(NULL, ",");
+        operand_string[i] = strtok(NULL, ",\n");
         if (operand_string[i] == NULL)
         {
             lexed_instruction.operand_num = i;

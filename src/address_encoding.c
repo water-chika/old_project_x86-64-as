@@ -6,7 +6,7 @@
 address_encoding_t encode_address(operand_t operand)
 {
     address_encoding_t address_encoding = {};
-    if (operand.type == OPERAND_REGISTER)
+    if (operand.type == OPERAND_TYPE_REGISTER)
     {
         if (belong_to_register_class(operand.reg, REGISTER_CLASS_R64))
         {
@@ -63,7 +63,7 @@ address_encoding_t encode_address(operand_t operand)
         address_encoding.r_m = r_m;
         address_encoding.exist_sib = 0; 
     }
-    else if (operand.type == OPERAND_MEMORY)
+    else if (operand.type == OPERAND_TYPE_MEMORY)
     {
         if (operand.mem.address_type == MEMORY_ADDRESS_INSTRUCTION_RELATIVE)
         {

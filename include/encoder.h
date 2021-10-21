@@ -99,4 +99,6 @@ binary_instruction_t generate_binary_instruction(encoded_instruction_t encoded_i
 
 void print_encoded_instruction(encoded_instruction_t encoded_instruction);
 
+encoded_instruction_t encode_exact_instruction(exact_instruction_t exact_instruction);
+
 #endif

@@ -9,10 +9,11 @@
 
 typedef enum
 {
-    OPERAND_IMMEDIATE,
-    OPERAND_REGISTER,
-    OPERAND_MEMORY,
+    OPERAND_TYPE_IMMEDIATE,
+    OPERAND_TYPE_REGISTER,
+    OPERAND_TYPE_MEMORY,
 }operand_type_t;
+
 typedef struct 
 {
     operand_type_t type;
@@ -62,5 +63,17 @@ typedef struct{
 int belong_operand_class(operand_t operand, operand_class_t operand_class);
 
 int print_operand_class(operand_class_t operand_class);
+
+typedef struct 
+{
+    operand_type_t operand_type;
+    union{
+        immediate_operand_t immediate_operand;
+        register_operand_t register_operand;
+        memory_operand_t memory_operand;
+    };
+}exact_operand_t;
+
+int exact_operand_belong_operand_class(exact_operand_t operand, operand_class_t operand_class);
 
 #endif

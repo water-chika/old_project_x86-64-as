@@ -15,13 +15,13 @@ int main(int argc, char** argv)
     for (int i = 0; i < lexed_instruction.operand_num - 1; i++)
     {
         operand_t operand = lexed_instruction.operand[i];
-        printf("(%d,%d),", operand.type, (int)(operand.type == OPERAND_IMMEDIATE?operand.imm:operand.reg));
+        printf("(%d,%d),", operand.type, (int)(operand.type == OPERAND_TYPE_IMMEDIATE?operand.imm:operand.reg));
     }
     
     if (lexed_instruction.operand_num > 0)
     {
         operand_t last_operand = lexed_instruction.operand[lexed_instruction.operand_num-1];
-        printf("(%d,%d)\n",last_operand.type, (int)(last_operand.type == OPERAND_IMMEDIATE?last_operand.imm:last_operand.reg));
+        printf("(%d,%d)\n",last_operand.type, (int)(last_operand.type == OPERAND_TYPE_IMMEDIATE?last_operand.imm:last_operand.reg));
     }
 
     return 0;

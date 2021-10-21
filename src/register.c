@@ -47,6 +47,7 @@ x86_64_register_t lex_register(const char* register_string)
     if (result == NULL)
     {
         fprintf(stderr, "Unknown register: %s\n", register_string);
+        assert(0);
         exit(-1);
     }
     return result->reg;
@@ -203,4 +204,29 @@ int encode_general_purpose_register(x86_64_register_t gpr)
     fprintf(stderr, "Unknown reg : %d\n", gpr);
     assert(0);
     return -1;
+}
+
+
+rflags_t decode_rflags_register(rflags_register_t rflags_register)
+{
+    rflags_t rflags = {};
+    rflags.CF = rflags_register & 0x1;
+    rflags.PF = rflags_register >> 2;
+    rflags.AF = rflags_register >> 4;
+    rflags.ZF = rflags_register >> 6;
+    rflags.SF = rflags_register >> 7;
+    rflags.DF = rflags_register >> 10;
+    rflags.OF = rflags_register >> 11;
+    return rflags;
+}
+rflags_register_t encode_rfalgs(rflags_t rflags)
+{
+    rflags_register_t rflags_register;
+    rflags_register = (rflags.OF<<11) | (rflags.DF << 10) | (rflags.SF << 7) |
+        (rflags.ZF << 6) | (rflags.AF << 4) | (rflags.PF << 2) | (rflags.CF << 0);
+}
+
+int is_valid_rflags_register(rflags_register_t rflags_register)
+{
+    return (rflags_register & 0x0000cd5) == 0;
 }

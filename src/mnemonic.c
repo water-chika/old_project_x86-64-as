@@ -12,7 +12,10 @@ typedef struct
 
 mnemonic_map_string_t mnemonic_map_string[] = {
     {"ADC", MNEMONIC_ADC},
+    {"ADD", MNEMONIC_ADD},
     {"CLC", MNEMONIC_CLC},
+    {"CMOVA", MNEMONIC_CMOVA},
+    {"CMP", MNEMONIC_CMP},
     {"RET", MNEMONIC_RET},
     {"MOV", MNEMONIC_MOV},
     {"LEA", MNEMONIC_LEA},
@@ -32,6 +35,10 @@ mnemonic_t lex_mnemonic(const char* mnemonic_string)
     mnemonic_map_string_t* result = lfind(&mnemonic_search,
         mnemonic_map_string, &mnemonic_map_string_num, sizeof(mnemonic_map_string_t), 
         cmp_mnemonic_map_string_str);
+    if (result == NULL)
+    {
+        fprintf(stderr, "Unknown mnemonic : %s", mnemonic_string);
+    }
     assert(result);
     return result->mnemonic;
 }

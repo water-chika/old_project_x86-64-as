@@ -1,6 +1,7 @@
 #ifndef REGISTER_H
 #define REGISTER_H
 #include <search.h>
+#include <stdint.h>
 typedef enum
 {
     REGISTER_AL,REGISTER_CL,REGISTER_DL,REGISTER_BL,
@@ -60,4 +61,28 @@ int belong_to_register_class(x86_64_register_t reg, x86_64_register_class_t reg_
 
 int is_general_purpose_register(x86_64_register_t reg);
 int encode_general_purpose_register(x86_64_register_t gpr);
+
+typedef struct 
+{
+    uint64_t CF : 1;
+    uint64_t PF : 1;
+    uint64_t AF : 1;
+    uint64_t ZF : 1;
+    uint64_t SF : 1;
+    uint64_t DF : 1;
+    uint64_t OF : 1;
+}rflags_t;
+typedef uint64_t rflags_register_t;
+
+rflags_t decode_rflags_register(rflags_register_t rflags_register);
+rflags_register_t encode_rfalgs(rflags_t rfalgs);
+int is_valid_rflags_register(rflags_register_t rflags_register);
+
+typedef struct 
+{
+    x86_64_register_t reg;
+    operand_size_t operand_size;
+}register_operand_t;
+
+
 #endif
