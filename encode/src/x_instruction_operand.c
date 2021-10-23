@@ -20,7 +20,7 @@ x_instruction_t x_instruction_opcode(uint8_t opcode)
 }
 x_instruction_t x_instruction_operand_Eb(amd64_operand_t operand)
 {
-    x_instruction_t x_instruction;
+    x_instruction_t x_instruction = {};
 
     if (operand.operand_type == AMD64_OPERAND_TYPE_REGISTER)
     {
@@ -39,18 +39,26 @@ x_instruction_t x_instruction_operand_Eb(amd64_operand_t operand)
                 x_instruction.rex_prefix.b = 1;
             }
         }
+        x_instruction.care_mod_rm = 1;
+        x_instruction.exist_mod_rm = 1;
+        x_instruction.mod_rm.care_mod = 1;
+        x_instruction.mod_rm.mod = 0b11;
+        x_instruction.mod_rm.care_rm = 1;
+        x_instruction.mod_rm.rm = operand.reg.start_address.y & 0b111;
     }
     else
     {
         assert(0);
     }
+    
+    return x_instruction;
 }
 x_instruction_t x_instruction_operand_Gb(amd64_operand_t operand)
 {
     x_instruction_t x_instruction = {};
 
     assert(operand.operand_type == AMD64_OPERAND_TYPE_REGISTER);
-    assert(operand.reg.amd64_register_namespace = AMD64_BITS_NAMESPACE_GENERAL_PURPOSE_REGISTER);
+    assert(operand.reg.amd64_register_namespace == AMD64_BITS_NAMESPACE_GENERAL_PURPOSE_REGISTER);
     assert(operand.reg.width == 8);
     assert(operand.reg.start_address.x == 0);
     assert(operand.reg.start_address.z == 0);

@@ -358,6 +358,7 @@ x_instruction_immediate_t add_x_instruction_immediate(x_instruction_immediate_t 
     return result;
 }
 
+uint8_t generate_rex_prefix_byte(x_instruction_rex_prefix_t x_instruction_rex_prefix);
 uint8_t generate_mod_rm_byte(x_instruction_mod_rm_t x_instruction_mod_rm);
 uint8_t generate_sib_byte(x_instruction_sib_t x_instruction_sib);
 amd64_binary_instruction_t generate_binary_instruction(x_instruction_t x_instruction)
@@ -382,6 +383,10 @@ amd64_binary_instruction_t generate_binary_instruction(x_instruction_t x_instruc
     if (x_instruction.care_repeat_prefix)
     {
         assert(0);
+    }
+    if (x_instruction.care_rex_prefix && x_instruction.exist_rex_prefix)
+    {
+        binary_code.code[binary_code.byte_num++] = generate_rex_prefix_byte(x_instruction.rex_prefix);
     }
     if (x_instruction.care_primary_opcode && x_instruction.exist_primary_opcode)
     {
@@ -421,7 +426,7 @@ amd64_binary_instruction_t generate_binary_instruction(x_instruction_t x_instruc
             imm >>= 8;
         }
     }
-    assert(0);
+    return binary_code;
 }
 uint8_t generate_mod_rm_byte(x_instruction_mod_rm_t x_instruction_mod_rm)
 {
@@ -435,3 +440,7 @@ uint8_t generate_sib_byte(x_instruction_sib_t x_instruction_sib)
     assert(0);
 }
 
+uint8_t generate_rex_prefix_byte(x_instruction_rex_prefix_t x_instruction_rex_prefix)
+{
+    return 0x40 | (x_instruction_rex_prefix.w << 3) | (x_instruction_rex_prefix.r << 2) | (x_instruction_rex_prefix.x << 1) | (x_instruction_rex_prefix.b);
+}
